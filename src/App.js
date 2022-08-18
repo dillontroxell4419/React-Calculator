@@ -1,5 +1,3 @@
-/*eslint no-unused-expressions: ["error", { "allowTernary": true }]*/
-
 import { useState } from "react";
 import Button from "./components/button/Button";
 import CalcContainer from "./components/main-container/CalcContainer";
@@ -14,31 +12,127 @@ const btnValues = [
 
 function App() {
   // State
-  const [curScrVal, setCurScrVal] = useState(0);
-  const [calcOperation, setOperation] = useState("");
+  const [calcVals, setCalcVals] = useState({
+    sign: "",
+    num: 0,
+    res: 0,
+  });
 
   // Functions
-  const buttonClickHandler = (value) => {
-    if(curScrVal === 0){
-      setCurScrVal(value.toString())
+  // Helpers
+  const isNumber = (value) => {
+    return typeof value === "number" && isFinite(value);
+  };
+
+  // Handlers
+
+  const onNumberHandler = (e) => {
+    e.preventDefault();
+    const value = e.target.innerHTML;
+
+    setCalcVals({
+      ...calcVals,
+      num:
+        calcVals.num === 0 && value === "0"
+          ? "0"
+          : calcVals.num % 1 === 0
+          ? Number(calcVals.num + value)
+          : calcVals.num + value,
+      res: !calcVals.sign ? 0 : calcVals.res,
+    });
+  };
+
+  const onClearHandler = (e) => {
+    e.preventDefault();
+
+    setCalcVals({ sign: "", num: 0, res: 0 });
+  };
+
+  const onSignHandler = (e) => {
+    const value = e.target.innerHTML;
+    const result = calcVals.res;
+    e.preventDefault();
+    setCalcVals({
+      ...calcVals,
+      sign: value,
+      res: !calcVals.res && calcVals.num ? calcVals.num : calcVals.res,
+      num: 0,
+    });
+  };
+
+  const equalsClickHandler = () => {
+    if (calcVals.sign && calcVals.num) {
+      const math = (a, b, sign) =>
+        sign === "+"
+          ? a + b
+          : sign === "-"
+          ? a - b
+          : sign === "X"
+          ? a * b
+          : a / b;
+
+      setCalcVals({
+        ...calcVals,
+        res:
+          calcVals.num === "0" && calcVals.sign === "/"
+            ? "Can't divide with 0"
+            : math(Number(calcVals.res), Number(calcVals.num), calcVals.sign),
+        sign: "",
+        num: 0,
+      });
     }
-    
-    if (value === "C" || value == "=") {
-      return;
-    }
-    setCurScrVal(curScrVal.toString() + value.toString());
+  };
+
+  const invertClickHandler = () => {
+    setCalcVals({
+      ...calcVals,
+      num: calcVals.num ? calcVals.num * -1 : 0,
+      res: calcVals.res ? calcVals.res * -1 : 0,
+      sign: "",
+    });
+  };
+
+  const percentClickHandler = () => {
+    let num = calcVals.num ? parseFloat(calcVals.num) : 0;
+    let res = calcVals.res ? parseFloat(calcVals.res) : 0;
+
+    setCalcVals({
+      ...calcVals,
+      num: (num /= Math.pow(100, 1)),
+      res: (res /= Math.pow(100, 1)),
+      sign: "",
+    });
   };
 
   return (
     <div>
       <CalcContainer>
-        <Screen scrVal={curScrVal} />
-        {btnValues.flat().map((btn) => {
+        <Screen value={calcVals.num ? calcVals.num : calcVals.res} />
+        {btnValues.flat().map((btn, i) => {
           return (
             <Button
+              key={i}
               className={btn === "=" ? "button equals" : "button"}
               value={btn}
-              onButtonClick={buttonClickHandler}
+              onClick={
+                isNumber(btn)
+                  ? onNumberHandler
+                  : btn === "C"
+                  ? onClearHandler
+                  : btn === "+" ||
+                    btn === "-" ||
+                    btn === "X" ||
+                    btn === "/" ||
+                    btn === "%"
+                  ? onSignHandler
+                  : btn === "="
+                  ? equalsClickHandler
+                  : btn === "+-"
+                  ? invertClickHandler
+                  : btn === "%"
+                  ? percentClickHandler
+                  : undefined
+              }
             />
           );
         })}
