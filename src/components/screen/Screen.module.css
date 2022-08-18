@@ -1,0 +1,19 @@
+.screen {
+  background-color: #757575;
+  border-radius: 15px;
+  width: 90%;
+  height: 80%;
+  grid-column: 1/-1;
+  align-self: end;
+  justify-self: center;
+  margin-bottom: 7px;
+
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.screen-content {
+  padding-right: 1rem;
+  font-size: 1.5rem;
+}

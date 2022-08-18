@@ -1,0 +1,26 @@
+.button {
+  background-color: #2abfae;
+  width: 90%;
+  height: 80%;
+  align-self: center;
+  justify-self: center;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+
+}
+.button:hover {
+  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.28);
+  cursor: pointer;
+}
+
+.button:active {
+  transform: translateY(3px);
+}
+
+.equals {
+  grid-column: span 2;
+  background-color: #ebca3b;
+}
