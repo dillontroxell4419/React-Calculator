@@ -7,11 +7,22 @@
   font-family: "Montserrat", sans-serif;
 }
 
-.calc-container {
+.calc-container_dark {
   width: 300px;
   height: 500px;
   background-color: #3b403c;
   border: 10px solid #3b403c;
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+}
+
+.calc-container_light {
+  width: 300px;
+  height: 500px;
+  background-color: #dadada;
+  border: 10px solid #dadada;
   border-radius: 20px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);

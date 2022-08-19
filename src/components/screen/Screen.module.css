@@ -1,4 +1,4 @@
-.screen {
+.screen-dark{
   background-color: #757575;
   border-radius: 15px;
   width: 90%;
@@ -8,6 +8,21 @@
   justify-self: center;
   margin-bottom: 7px;
 
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.screen-light{
+  background-color: #3b3b3b;
+  border-radius: 15px;
+  width: 90%;
+  height: 80%;
+  grid-column: 1/-1;
+  align-self: end;
+  justify-self: center;
+  margin-bottom: 7px;
+  color: White;
   display: flex;
   align-items: center;
   justify-content: end;

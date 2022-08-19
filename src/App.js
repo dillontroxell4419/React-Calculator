@@ -2,6 +2,8 @@ import { useState } from "react";
 import Button from "./components/button/Button";
 import CalcContainer from "./components/main-container/CalcContainer";
 import Screen from "./components/screen/Screen";
+import Slider from "./components/Slider/Slider";
+import "./App.css"
 const btnValues = [
   ["C", "+-", "%", "/"],
   [7, 8, 9, "X"],
@@ -17,6 +19,8 @@ function App() {
     num: 0,
     res: 0,
   });
+
+  const [darkMode, changeMode] = useState(true);
 
   // Functions
   // Helpers
@@ -104,13 +108,23 @@ function App() {
     });
   };
 
+  const sliderHandler = (e) => {
+    changeMode(!darkMode);
+  };
+
   return (
-    <div>
-      <CalcContainer>
-        <Screen value={calcVals.num ? calcVals.num : calcVals.res} />
+    <div className={darkMode ? "main main-dark" : "main main-light"}>
+      <Slider onClick={sliderHandler} />
+      <CalcContainer
+      color={darkMode ? "dark" : "light"}>
+        <Screen
+          color={darkMode ? "dark" : "light"}
+          value={calcVals.num ? calcVals.num : calcVals.res}
+        />
         {btnValues.flat().map((btn, i) => {
           return (
             <Button
+              color={darkMode ? "dark" : "light"}
               key={i}
               className={btn === "=" ? "button equals" : "button"}
               value={btn}
