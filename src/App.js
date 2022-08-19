@@ -3,7 +3,7 @@ import Button from "./components/button/Button";
 import CalcContainer from "./components/main-container/CalcContainer";
 import Screen from "./components/screen/Screen";
 import Slider from "./components/Slider/Slider";
-import "./App.css"
+import "./App.css";
 const btnValues = [
   ["C", "+-", "%", "/"],
   [7, 8, 9, "X"],
@@ -28,6 +28,10 @@ function App() {
     return typeof value === "number" && isFinite(value);
   };
 
+  function isFloat(n) {
+    return Number(n) === n && n % 1 !== 0;
+  }
+
   // Handlers
 
   const onNumberHandler = (e) => {
@@ -37,7 +41,9 @@ function App() {
     setCalcVals({
       ...calcVals,
       num:
-        calcVals.num === 0 && value === "0"
+        calcVals.num.toString().includes("0.") && value == 0
+          ? calcVals.num + value
+          : calcVals.num === 0 && value === "0"
           ? "0"
           : calcVals.num % 1 === 0
           ? Number(calcVals.num + value)
@@ -74,12 +80,20 @@ function App() {
           : sign === "X"
           ? a * b
           : a / b;
-
+      console.log(
+        math(Number(calcVals.res), Number(calcVals.num), calcVals.sign)
+      );
       setCalcVals({
         ...calcVals,
         res:
           calcVals.num === "0" && calcVals.sign === "/"
             ? "Can't divide with 0"
+            : isFloat(
+                math(Number(calcVals.res), Number(calcVals.num), calcVals.sign)
+              )
+            ? parseFloat(
+                math(Number(calcVals.res), Number(calcVals.num), calcVals.sign)
+              ).toFixed(4)
             : math(Number(calcVals.res), Number(calcVals.num), calcVals.sign),
         sign: "",
         num: 0,
@@ -108,6 +122,18 @@ function App() {
     });
   };
 
+  const decimalClickHandler = (e) => {
+    e.preventDefault();
+    const value = e.target.innerHTML;
+
+    setCalcVals({
+      ...calcVals,
+      num: !calcVals.num.toString().includes(".")
+        ? calcVals.num + value
+        : calcVals.num,
+    });
+  };
+
   const sliderHandler = (e) => {
     changeMode(!darkMode);
   };
@@ -115,8 +141,7 @@ function App() {
   return (
     <div className={darkMode ? "main main-dark" : "main main-light"}>
       <Slider onClick={sliderHandler} />
-      <CalcContainer
-      color={darkMode ? "dark" : "light"}>
+      <CalcContainer color={darkMode ? "dark" : "light"}>
         <Screen
           color={darkMode ? "dark" : "light"}
           value={calcVals.num ? calcVals.num : calcVals.res}
@@ -145,6 +170,8 @@ function App() {
                   ? invertClickHandler
                   : btn === "%"
                   ? percentClickHandler
+                  : btn === "."
+                  ? decimalClickHandler
                   : undefined
               }
             />
