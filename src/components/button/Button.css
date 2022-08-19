@@ -20,8 +20,13 @@
   background-color: #e40072;
 }
 
-.button:hover {
-  box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.28);
+.btn-dark:hover {
+  box-shadow: inset 0 0 100px 100px rgba(192, 192, 192, 0.28);
+  cursor: pointer;
+}
+
+.btn-light:hover {
+  box-shadow: inset 0 0 100px 100px rgba(68, 68, 68, 0.26);
   cursor: pointer;
 }
 
